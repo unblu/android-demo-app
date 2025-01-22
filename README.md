@@ -48,19 +48,19 @@ At minimum, Unblu needs Internet and often Audio/Video permissions. For example:
 •	Grants the app permission to access the internet.
 •	Required for network-related operations, such as downloading data, sending requests, or connecting to APIs.
 
-###	android.permission.BLUETOOTH:
+####	android.permission.BLUETOOTH:
 •	Grants access to interact with Bluetooth devices.
 •	Includes scanning for devices, pairing, and communication over Bluetooth.
 
-###	android.permission.POST_NOTIFICATIONS:
+####	android.permission.POST_NOTIFICATIONS:
 •	Required for posting notifications on Android 13 (API level 33) and above.
 •	Ensures the app has explicit user consent to send notifications.
 
-###	android.permission.RECORD_AUDIO:
+####	android.permission.RECORD_AUDIO:
 •	Grants the app permission to record audio from the microphone.
 •	Needed for features like voice recording, video calls, or sound analysis.
 
-### android.permission.CAMERA
+####    android.permission.CAMERA
 •	Allows an app to access the device’s camera to capture video or images.
 •	Recording videos using the camera.
 
@@ -70,26 +70,26 @@ At minimum, Unblu needs Internet and often Audio/Video permissions. For example:
 
 
 
-### READ_EXTERNAL_STORAGE:
+#### READ_EXTERNAL_STORAGE:
 	•   Granted apps access to all files in external storage, including images, videos, and documents.
 	•	Limitation: Provided broad access, potentially exposing sensitive data.
 	•	Restricted apps to their own files by default, enhancing user privacy.
     •	Starting with Android 13 (API level 33), the permission has been deprecated
 
-### READ_MEDIA_AUDIO: Access to audio files.
+#### READ_MEDIA_AUDIO: Access to audio files.
 
-### READ_MEDIA_IMAGES: Access to image files.
+#### READ_MEDIA_IMAGES: Access to image files.
 
-### READ_MEDIA_VIDEO: Access to video files.
+#### READ_MEDIA_VIDEO: Access to video files.
 
-### READ_MEDIA_AUDIO: Access to audio files.
+#### READ_MEDIA_AUDIO: Access to audio files.
 
 	•	Allows users to grant apps access to specific media types, replacing the broader READ_EXTERNAL_STORAGE permission.
 	•	Partial Media Access:
 	•	For devices running Android 12L (API level 32) or lower, continue using READ_EXTERNAL_STORAGE.
 
 
-### **Comply with Google Play Policies:**
+#### **Comply with Google Play Policies:**
 
 •	By January 22, 2025, apps requesting READ_MEDIA_IMAGES or READ_MEDIA_VIDEO must undergo an access review to justify the necessity for broad media access. Failure to comply may result in app updates being blocked or removal from Google Play.
 
@@ -97,8 +97,45 @@ At minimum, Unblu needs Internet and often Audio/Video permissions. For example:
 ## 2. Key Implementation Steps with Code
 
 
+### 2.1	 Inheriting from UnbluApplication or Using UnbluApplicationHelper.
 
-### 2.1	Create client configuration.
+You have two options for integrating Unblu:
+1.	Inherit from UnbluApplication:
+   
+•	If your main application class extends UnbluApplication, no additional configuration is required.
+
+3.	Keep your existing Application inheritance and manually invoke Unblu methods:
+	
+ •	In your Application class, within the onCreate() method, call:
+
+```
+UnbluApplicationHelper.onCreate(this);
+```
+	
+ •	In the onTerminate() method, call:
+
+```
+UnbluApplicationHelper.onTerminate();
+```
+
+•	In the onConfigurationChanged(Configuration newConfig) method, call:
+
+```
+UnbluApplicationHelper.onConfigurationChanged(newConfig);
+```
+
+These calls allow Unblu to observe device state changes (like orientation) and listen for activity lifecycle events.
+
+Finally, in your Activity, within the onNewIntent(Intent intent) method, you must also call:
+
+```
+UnbluApplicationHelper.onNewIntent(intent.getExtras());
+```
+
+This is necessary to properly handle notification actions, such as tapping a button in an incoming call notification.
+
+
+### 2.2	Create client configuration.
 Here you configure specific client settings.
 
 ```
@@ -111,7 +148,7 @@ val unbluClientConfiguration = UnbluClientConfiguration.Builder(
 )
 ```
 
-### 2.2	Create the modules that will be used.
+### 2.3	Create the modules that will be used.
 Here you can configure specific module settings.
 
 ```
@@ -124,7 +161,7 @@ val coBrowsingModule = MobileCoBrowsingModuleProvider.create()
 
 ```
 
-### 2.3	Register Modules.
+### 2.4	Register Modules.
 
 ```
 val unbluClientConfiguration = UnbluClientConfiguration.Builder(...)
@@ -134,7 +171,7 @@ val unbluClientConfiguration = UnbluClientConfiguration.Builder(...)
 ```
 
 
-### 2.4	You can use observables available in modules to handle module events.
+### 2.5	You can use observables available in modules to handle module events.
 
 
 ```
@@ -147,7 +184,7 @@ callModule.isCallActive()
 
 ```
 
-### 2.5	Create and Start Client.
+### 2.6	Create and Start Client.
 When the client starts, it attempts to load the initial JavaScript scripts and establish a connection via the JavaScript API to the collaboration server.
 
 You can access the Unblu view here or utilize a separate event stream as demonstrated in section 2.6.
@@ -166,7 +203,7 @@ Unblu.createVisitorClient(
 )
 ```
 
-### 2.6 Embed Unblu View into the UI
+### 2.7 Embed Unblu View into the UI
 The view is an Unblu container that extends RelativeLayout and contains an embedded WebView.
 ```
 
