@@ -170,8 +170,22 @@ val unbluClientConfiguration = UnbluClientConfiguration.Builder(...)
     .build()
 ```
 
+### 2.5 Subscribing to Unblu UI Visibility Requests at Application Startup
 
-### 2.5	You can use observables available in modules to handle module events.
+You can use this code at a very early stage in your application’s lifecycle for example, in the onCreate() method of your Application class:
+
+```
+Unblu
+    .onUiVisibilityRequest()
+    .subscribe {
+        // Handle UI visibility requests, e.g., show the Unblu UI when needed
+    }
+```
+
+This allows you to be notified of incoming events, such as call notifications, and to display the Unblu UI if necessary.
+
+
+### 2.6	You can use observables available in modules to handle module events.
 
 
 ```
@@ -184,7 +198,7 @@ callModule.isCallActive()
 
 ```
 
-### 2.6	Create and Start Client.
+### 2.7	Create and Start Client.
 When the client starts, it attempts to load the initial JavaScript scripts and establish a connection via the JavaScript API to the collaboration server.
 
 You can access the Unblu view here or utilize a separate event stream as demonstrated in section 2.6.
@@ -203,7 +217,7 @@ Unblu.createVisitorClient(
 )
 ```
 
-### 2.7 Embed Unblu View into the UI
+### 2.8 Embed Unblu View into the UI
 The view is an Unblu container that extends RelativeLayout and contains an embedded WebView.
 ```
 
