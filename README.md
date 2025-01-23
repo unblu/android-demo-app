@@ -284,8 +284,19 @@ dependencies {
 
 5. Place the google-services.json file in the app/ directory.
 
- 
-6. Initialize Unblu notification API in your code:
+6. Add this permission to your AndroidManifest.xml:
+
+```
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+```
+
+7. If targeting Android 13 (API 33+) and above, you need to request notification permissions:
+
+```
+ requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
+```
+
+8. Initialize Unblu notification API in your code:
 
 ```
 private var unbluNotificationApi: UnbluNotificationApi =
