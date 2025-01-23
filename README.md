@@ -235,3 +235,59 @@ setContent {
     }
 }
 ```
+
+
+### 2.9  Enable Firebase push notifications
+
+After completing the following steps, when the app starts and the Unblu API is initialized, the Firebase token will be sent to the server, 
+allowing it to send push notifications.
+When the Unblu notifications module receives a remote notification, it analyzes whether it originates from the Unblu collaboration server. 
+If it does, the notification is processed; otherwise, it is ignored.
+
+
+1. Add Firebase dependencies:
+
+```
+dependencies {
+    classpath 'com.google.gms:google-services:x.x.x'
+}
+```
+
+2. Apply the Google services plugin in your app-level build.gradle:
+
+```
+plugins {
+    id("com.google.gms.google-services")
+}
+```
+	
+3. Add Unblu Firebase dependencies to your app-level build.gradle:
+
+```
+dependencies {
+    implementation("com.unblu.mobile-sdk-android:firebasenotificationmodule:x.x.x")
+}
+ ```
+
+
+4. Add the Firebase service in your AndroidManifest.xml:
+
+```
+<service
+    android:name="com.unblu.sdk.module.firebase_notification.UnbluFirebaseNotificationService"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+</service>
+```
+
+5. Place the google-services.json file in the app/ directory.
+
+ 
+6. Initialize Unblu notification API in your code:
+
+```
+private var unbluNotificationApi: UnbluNotificationApi =
+    UnbluFirebaseNotificationService.getNotificationApi()
+```
