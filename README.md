@@ -28,9 +28,9 @@ If any aspects are found to be missing, please review the project and code to ch
 
 ### 1.2 Important Gradle Config
 
-•	Project-level Settings: Add google() and mavenCentral() to your repositories.
+•	Project-level Settings: Add `google()` and `mavenCentral()` to your repositories.
 •	Module-level Dependencies:
-•	Add Unblu SDK modules (e.g., coresdk, callmodule, mobilecobrowsingmodule) in the dependencies block.
+•	Add Unblu SDK modules (e.g., `coresdk`, `callmodule`, `mobilecobrowsingmodule`) in the dependencies block.
 
 ### 1.3 Manifest Permissions
 
@@ -93,6 +93,10 @@ At minimum, Unblu needs Internet and often Audio/Video permissions. For example:
 
 •	By January 22, 2025, apps requesting READ_MEDIA_IMAGES or READ_MEDIA_VIDEO must undergo an access review to justify the necessity for broad media access. Failure to comply may result in app updates being blocked or removal from Google Play.
 
+### 1.4 Add Unblu credentials
+
+For the demo app to work, you must add your Unblu credentials (your API key and the server URL) to [`UnbluConstants.kt`](https://github.com/unblu/android-demo-app/blob/main/app/src/main/java/com/unblu/navigation/demoapp/unblu/UnbluConstants.kt).
+
 
 ## 2. Key Implementation Steps with Code
 
@@ -101,24 +105,24 @@ At minimum, Unblu needs Internet and often Audio/Video permissions. For example:
 
 You have two options for integrating Unblu:
 1.	Inherit from UnbluApplication:
-   
-•	If your main application class extends UnbluApplication, no additional configuration is required.
+
+•	If your main application class extends `UnbluApplication`, no additional configuration is required.
 
 3.	Keep your existing Application inheritance and manually invoke Unblu methods:
-	
- •	In your Application class, within the onCreate() method, call:
+
+ •	In your Application class, within the `onCreate()` method, call:
 
 ```
 UnbluApplicationHelper.onCreate(this);
 ```
-	
- •	In the onTerminate() method, call:
+
+ •	In the `onTerminate()` method, call:
 
 ```
 UnbluApplicationHelper.onTerminate();
 ```
 
-•	In the onConfigurationChanged(Configuration newConfig) method, call:
+•	In the `onConfigurationChanged(Configuration newConfig)` method, call:
 
 ```
 UnbluApplicationHelper.onConfigurationChanged(newConfig);
@@ -126,7 +130,7 @@ UnbluApplicationHelper.onConfigurationChanged(newConfig);
 
 These calls allow Unblu to observe device state changes (like orientation) and listen for activity lifecycle events.
 
-Finally, in your Activity, within the onNewIntent(Intent intent) method, you must also call:
+Finally, in your Activity, within the `onNewIntent(Intent intent)` method, you must also call:
 
 ```
 UnbluApplicationHelper.onNewIntent(intent.getExtras());
@@ -218,7 +222,7 @@ Unblu.createVisitorClient(
 ```
 
 ### 2.8 Embed Unblu View into the UI
-The view is an Unblu container that extends RelativeLayout and contains an embedded WebView.
+The view is an Unblu container that extends RelativeLayout and contains an embedded `WebView`.
 ```
 
 Unblu.onVisitorInitialized()
@@ -239,9 +243,9 @@ setContent {
 
 ### 2.9  Enable Firebase push notifications
 
-After completing the following steps, when the app starts and the Unblu API is initialized, the Firebase token will be sent to the server, 
+After completing the following steps, when the app starts and the Unblu API is initialized, the Firebase token will be sent to the server,
 allowing it to send push notifications.
-When the Unblu notifications module receives a remote notification, it analyzes whether it originates from the Unblu collaboration server. 
+When the Unblu notifications module receives a remote notification, it analyzes whether it originates from the Unblu collaboration server.
 If it does, the notification is processed; otherwise, it is ignored.
 
 
@@ -260,7 +264,7 @@ plugins {
     id("com.google.gms.google-services")
 }
 ```
-	
+
 3. Add Unblu Firebase dependencies to your app-level build.gradle:
 
 ```
